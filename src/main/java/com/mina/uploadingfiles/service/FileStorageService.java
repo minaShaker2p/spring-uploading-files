@@ -1,5 +1,7 @@
 package com.mina.uploadingfiles.service;
 
+import com.mina.uploadingfiles.exception.FileStorageException;
+import com.mina.uploadingfiles.exception.MyFileNotFoundException;
 import com.mina.uploadingfiles.properties.FileStorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -26,7 +28,7 @@ public class FileStorageService {
 
         try {
             Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             throw new FileStorageException("Couldn't create the directory where the uploaded files will be stored.", ex);
         }
     }
@@ -43,7 +45,7 @@ public class FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
-        } catch (IOException e) {
+        } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
